@@ -256,7 +256,7 @@ GIFLIB_EXPORT ColorMapObject *GifUnionColorMap(const ColorMapObject *ColorIn1,
                                      GifPixelType ColorTransIn2[]);
 GIFLIB_EXPORT int GifBitSize(int n);
 
-GIFLIB_EXPORT void *
+extern void *
 reallocarray(void *optr, size_t nmemb, size_t size);
 
 /******************************************************************************
