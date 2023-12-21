@@ -20,7 +20,34 @@ add_library(giflib
   lib/quantize.c
 )
 
+add_library(giflib_static  STATIC
+  lib/dgif_lib.c
+  lib/egif_lib.c
+  lib/gif_err.c
+  lib/gif_font.c
+  lib/gif_hash.c
+  lib/gif_hash.h
+  lib/gif_lib.h
+  lib/gif_lib_private.h
+  lib/gifalloc.c
+  lib/openbsd-reallocarray.c
+  lib/quantize.c
+)
+
+set_target_properties(giflib_static PROPERTIES OUTPUT_NAME giflib)
+
+
 target_include_directories(giflib
+  PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>
+  INTERFACE
+  $<INSTALL_INTERFACE:include>
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>
+)
+
+
+target_include_directories(giflib_static
   PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>
   INTERFACE
@@ -35,6 +62,12 @@ target_compile_definitions(giflib
   _CRT_STDC_NO_DEPRECATE
 )
 
+target_compile_definitions(giflib_static
+  PRIVATE
+  _CRT_SECURE_NO_WARNINGS
+  _CRT_STDC_NO_DEPRECATE
+)
+
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
@@ -42,7 +75,8 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion
 )
 
-install(TARGETS giflib EXPORT giflib
+
+install(TARGETS giflib giflib_static EXPORT giflib
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
